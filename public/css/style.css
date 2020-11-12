@@ -1,0 +1,16 @@
+.blog{
+    -webkit-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.52);
+    -moz-box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.52);
+    box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.52);
+    margin-top: 25px;
+    margin-bottom: 25px;
+    background-color: white;
+    border-radius: 14px 14px 14px 14px;
+
+}
+body{
+    background-color: gray;
+}
+h1{
+    text-align: center;
+}

@@ -13,13 +13,56 @@ function connect() //connexion to database
         }
     }
     
-function add_author()//add author to database
+function add_author($name, $firstname)//add author to database
     {
+    $bdd=connect();
+    $req=$bdd->prepare('INSERT INTO `authors`(`name_authors`, `firstname_authors`) VALUES (:nom,:prenom)');
+    $req->bindParam(':nom', $name,PDO::PARAM_STR);
+    $req->bindParam(':prenom', $firstname,PDO::PARAM_STR);
+    $validation=$req->execute();
+    if($validation)
+                {
+                    return 'votre enregistrement a été ajouté avec succès';
+                } 
+                else 
+                {
+                    return 'Veuillez recommencer svp, une erreur est survenue';
+                }
+
+
 
     } 
-function add_post()// add post to database
+function add_post($id_author,$title,$content)// add post to database
     {
-
+        $bdd=connect();
+        $req=$bdd->prepare('INSERT INTO `posts`(`title_posts`, `content_posts`, `ID_authors`) VALUES (:title,:content,:id)');
+        $req->bindParam(':title', $title,PDO::PARAM_STR);
+        $req->bindParam(':content', $content,PDO::PARAM_STR);
+        $req->bindParam(':id', $id_author,PDO::PARAM_STR);
+        $validation=$req->execute();
+        if($validation)
+                    {
+                        return 'votre enregistrement a été ajouté avec succès';
+                    } 
+                    else 
+                    {
+                        return 'Veuillez recommencer svp, une erreur est survenue';
+                    }
+    
+    }
+function viewallposts() //select all posts from database
+    {
+    $bdd=connect();
+    $req=$bdd->prepare('SELECT * FROM posts INNER JOIN authors ON posts.ID_authors=authors.ID_authors');
+    $req->execute();
+    return $req;
+    }
+function viewonepost($id)//Select 1 post from database
+    {
+    $bdd=connect();
+    $req=$bdd->prepare('SELECT * FROM `posts` INNER JOIN `authors` ON posts.ID_authors=authors.ID_authors WHERE posts.ID_posts='.$id.'');
+    $req->execute();
+    return $req;
     }
 function transfert() //upload an image file
     {
@@ -58,4 +101,14 @@ function transfert() //upload an image file
         return true;
     }
     }
-
+function select_list_authors() // list of authors for add post view
+    {
+    $bdd=connect();
+    $reponse = $bdd->query('SELECT * FROM authors');
+    echo'<select class="custom-select my-2" name="id">';
+    echo'<option value="NULL">Choisir l\'auteur</option>';
+    while ($donnees = $reponse->fetch()) {
+        echo'<option value='.$donnees['ID_authors'].'>'.$donnees['firstname_authors'].' '.$donnees['name_authors'].' </option>';
+    }
+    echo'</select>';
+    }
